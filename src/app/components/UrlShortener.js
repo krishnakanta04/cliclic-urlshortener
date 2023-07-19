@@ -76,14 +76,14 @@ export default function UrlShortener() {
       <div className="flex justify-center mt-[40px]">
         {shortUrlId ? (
           <Link
-            href={`http://mainDomain/${shortUrlId}`}
+            href={`http://${mainDomain}/${shortUrlId}`}
             color="foreground"
             underline="hover"
             isExternal
             showAnchorIcon
             size="lg"
           >
-            http://mainDomain/{shortUrlId}
+            {`http://${mainDomain}/${shortUrlId}`}
           </Link>
         ) : loading ? (
           <Spinner color="primary" />
