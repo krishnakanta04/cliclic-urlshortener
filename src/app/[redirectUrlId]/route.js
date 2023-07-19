@@ -11,6 +11,5 @@ export async function GET(request, { params }) {
   });
 
   const redirectUrl = getShortUrl.originalUrl;
-  console.log(redirectUrl);
   return NextResponse.redirect(redirectUrl);
 }

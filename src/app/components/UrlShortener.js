@@ -10,9 +10,10 @@ import { toast } from "react-toastify";
 import urlValidation from "@/utils/urlValidation";
 
 export default function UrlShortener() {
+  const mainDomain = window.location.hostname;
+
   const [originalUrl, setOriginalUrl] = useState("");
   const [shortUrlId, setShortUrlId] = useState("");
-
   const [loading, setLoading] = useState(false);
 
   const submitUrl = async (e) => {
@@ -75,14 +76,14 @@ export default function UrlShortener() {
       <div className="flex justify-center mt-[40px]">
         {shortUrlId ? (
           <Link
-            href={`http://localhost:3000/${shortUrlId}`}
+            href={`http://mainDomain/${shortUrlId}`}
             color="foreground"
             underline="hover"
             isExternal
             showAnchorIcon
             size="lg"
           >
-            http://localhost:3000/{shortUrlId}
+            http://mainDomain/{shortUrlId}
           </Link>
         ) : loading ? (
           <Spinner color="primary" />
