@@ -6,6 +6,8 @@ import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import { Link } from "@nextui-org/link";
 import { Spinner } from "@nextui-org/spinner";
+import { toast } from "react-toastify";
+import urlValidation from "@/utils/urlValidation";
 
 export default function UrlShortener() {
   const [originalUrl, setOriginalUrl] = useState("");
@@ -15,53 +17,62 @@ export default function UrlShortener() {
 
   const submitUrl = async (e) => {
     e.preventDefault();
-    console.log(e.target.providedUrl.value);
     setLoading(true);
+
     try {
+      // if url is not correct
+      if (!urlValidation(originalUrl)) {
+        throw new Error("Enter a valid url");
+      }
+
       const response = await fetch("/api/shorten", {
         method: "POST",
         body: JSON.stringify({ originalUrl }),
       });
-      console.log(response);
 
       if (!response.ok) {
         const error = await response.json();
-        console.log(error);
         throw new Error(error);
       }
 
       const data = await response.json();
-      console.log(data);
       setShortUrlId(data.shortUrlId);
+      toast.success("Created short URL successfully");
     } catch (error) {
-      console.log("ERROR - ", error);
+      toast.error(error.message);
     }
     setLoading(false);
   };
 
-  console.log("Loading - ", loading);
   return (
-    <div className="mt-[20px]">
+    <div className="mt-[70px]">
       <form onSubmit={submitUrl} className="mb-[20px]">
         <Input
+          value={originalUrl}
           type="text"
           name="providedUrl"
           size="lg"
           color="primary"
-          variant="bordered"
-          placeholder="Paste your url here..."
-          value={originalUrl}
+          label="Paste your url here..."
+          labelPlacement="outside"
+          radius="sm"
           onValueChange={setOriginalUrl}
           endContent={
-            <Button isIconOnly color="primary" variant="flat" type="submit">
-              ➡️
+            <Button
+              color="primary"
+              variant="ghost"
+              type="submit"
+              size="sm"
+              radius="sm"
+            >
+              Generate ➡️
             </Button>
           }
-          className="max-w-[600px] m-auto"
+          className="max-w-[600px] m-auto "
         />
       </form>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-[40px]">
         {shortUrlId ? (
           <Link
             href={`http://localhost:3000/${shortUrlId}`}

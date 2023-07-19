@@ -5,7 +5,6 @@ import { nanoid } from "nanoid";
 export async function POST(request) {
   try {
     const { originalUrl } = await request.json();
-    console.log("originalUrl - ", originalUrl);
 
     if (!originalUrl) {
       return NextResponse.json("URL missing", { status: 500 });
@@ -23,18 +22,16 @@ export async function POST(request) {
       shortUrlId = existingShortenedUrl.shortUrlId;
     } else {
       shortUrlId = nanoid(5);
-      const newUrl = await prisma.shortenedUrl.create({
+      await prisma.shortenedUrl.create({
         data: {
           originalUrl,
           shortUrlId,
         },
       });
-      console.log("DB_RESPONSE - ", newUrl);
     }
 
     return NextResponse.json({ shortUrlId });
   } catch (error) {
-    console.log("ERROR - ", error);
     return NextResponse.json("Something went wrong", { status: 500 });
   }
 }
