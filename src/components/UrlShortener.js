@@ -9,12 +9,17 @@ import { Spinner } from "@nextui-org/spinner";
 import { toast } from "react-toastify";
 import urlValidation from "@/utils/urlValidation";
 
-export default function UrlShortener() {
-  const mainDomain = window.location.hostname;
+let mainDomain;
 
+export default function UrlShortener() {
   const [originalUrl, setOriginalUrl] = useState("");
   const [shortUrlId, setShortUrlId] = useState("");
   const [loading, setLoading] = useState(false);
+
+  if (typeof window === "object") {
+    mainDomain = window?.location.hostname;
+    console.log(mainDomain);
+  }
 
   const submitUrl = async (e) => {
     e.preventDefault();
